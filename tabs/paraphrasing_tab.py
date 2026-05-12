@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 
 from services.ai_service import (
     generate_paraphrasing_sentence,
@@ -22,6 +23,7 @@ from utils.timer_utils import (
 
 
 def render_paraphrasing_tab():
+    st_autorefresh(interval=1000, key="timer_refresh")
 
     st.header("🔄 Sentence Paraphrasing")
 
