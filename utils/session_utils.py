@@ -7,7 +7,7 @@ def initialize_session_state():
 
     defaults = {
         "child_name": "",
-        "child_age": 0,
+        "child_age": 13,
         "guardian_email": "",
         "session_duration_minutes": 20,
         "progress": 0,
