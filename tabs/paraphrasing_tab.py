@@ -52,7 +52,7 @@ def render_paraphrasing_tab():
     st.info(
         f"Session Time Remaining: {minutes}:{seconds:02d}"
     )
-    st_autorefresh(interval=1000, key="timer_refresh")
+    #st_autorefresh(interval=1000, key="timer_refresh")
 
     if not st.session_state.current_sentence:
 
