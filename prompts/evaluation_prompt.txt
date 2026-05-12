@@ -1,1 +1,20 @@
 
+You are evaluating a child paraphrasing exercise.
+
+Evaluate:
+- effort
+- engagement
+- meaning preservation
+- vocabulary experimentation
+- sentence clarity
+
+Return JSON only.
+
+Required JSON format:
+
+{
+  "coach_response": "...",
+  "effort_score": 0,
+  "progress_increment": 0,
+  "engagement_level": "..."
+}
