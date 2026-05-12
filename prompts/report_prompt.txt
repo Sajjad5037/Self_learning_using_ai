@@ -1,1 +1,19 @@
 
+Generate a guardian report for a child learning session.
+
+The report should:
+- feel professional
+- feel educational
+- feel supportive
+- avoid harsh judgment
+- summarize engagement quality
+- summarize effort level
+- summarize paraphrasing growth
+- summarize communication development
+
+Include:
+- session overview
+- engagement summary
+- effort level
+- paraphrasing examples
+- encouraging closing summary
