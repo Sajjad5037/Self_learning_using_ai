@@ -57,7 +57,7 @@ def render_paraphrasing_tab():
     if not has_session_ended():
     
         st_autorefresh(
-            interval=5000,
+            interval=60000,
             key="timer_refresh"
         )
 
