@@ -38,7 +38,7 @@ with st.sidebar:
 
     st.session_state.session_duration_minutes = st.selectbox(
         "Session Duration",
-        [10, 15, 20, 30],
+        [2,10, 15, 20, 30],
         index=2
     )
     if st.button("Start Session"):
