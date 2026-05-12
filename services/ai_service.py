@@ -3,7 +3,7 @@ import json
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="YOUR_OPENAI_API_KEY"
+    api_key="OPENAI_API_KEY"
 )
 
 
