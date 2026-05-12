@@ -38,7 +38,7 @@ def render_paraphrasing_tab():
         )
     
         return
-    st_autorefresh(interval=1000, key="timer_refresh")
+    
 
     st.header("🔄 Sentence Paraphrasing")
 
@@ -52,6 +52,7 @@ def render_paraphrasing_tab():
     st.info(
         f"Session Time Remaining: {minutes}:{seconds:02d}"
     )
+    st_autorefresh(interval=1000, key="timer_refresh")
 
     if not st.session_state.current_sentence:
 
@@ -65,12 +66,18 @@ def render_paraphrasing_tab():
 
     st.write(st.session_state.current_sentence)
 
-    student_response = st.text_area(
-        "Write your paraphrased sentence",
-        key="student_paraphrasing_response"
-    )
+    with st.form("paraphrasing_form"):
 
-    if st.button("Submit Response"):
+        student_response = st.text_area(
+            "Write your paraphrased sentence",
+            key="student_paraphrasing_response"
+        )
+    
+        submitted = st.form_submit_button(
+            "Submit Response"
+        )
+    
+    if submitted:
 
         if not student_response.strip():
 
