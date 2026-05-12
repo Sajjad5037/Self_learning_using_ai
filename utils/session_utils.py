@@ -12,7 +12,8 @@ def initialize_session_state():
         "session_duration_minutes": 20,
         "progress": 0,
         "chat_history": [],
-        "current_sentence": ""
+        "current_sentence": "",
+        "session_started": False
     }
 
     for key, value in defaults.items():
