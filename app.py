@@ -41,6 +41,34 @@ with st.sidebar:
         [10, 15, 20, 30],
         index=2
     )
+    if st.button("Start Session"):
+
+        if not st.session_state.child_name:
+    
+            st.warning(
+                "Please enter child name."
+            )
+    
+        elif not st.session_state.guardian_email:
+    
+            st.warning(
+                "Please enter guardian email."
+            )
+    
+        else:
+    
+            st.session_state.session_started = True
+    
+            st.session_state.progress = 0
+    
+            st.session_state.chat_history = []
+    
+            st.session_state.current_sentence = ""
+    
+            if "session_start_time" in st.session_state:
+                del st.session_state["session_start_time"]
+    
+            st.rerun()
 
     st.divider()
 
