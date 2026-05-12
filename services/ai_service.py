@@ -17,7 +17,7 @@ def generate_paraphrasing_sentence(child_age):
     """
 
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-4o-mini",
         messages=[
             {
                 "role": "user",
