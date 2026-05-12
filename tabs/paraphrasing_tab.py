@@ -143,17 +143,23 @@ def render_paraphrasing_tab():
         st.warning(
             "Session completed."
         )
-
-        report = generate_final_report()
-
-        send_report_email(report)
-
+    
+        if not st.session_state.report_sent:
+    
+            report = generate_final_report()
+    
+            send_report_email(report)
+    
+            st.session_state.final_report = report
+    
+            st.session_state.report_sent = True
+    
         st.success(
             "Guardian report sent successfully."
         )
-
+    
         st.text_area(
             "Generated Report",
-            report,
+            st.session_state.final_report,
             height=400
         )
