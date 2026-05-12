@@ -23,6 +23,21 @@ from utils.timer_utils import (
 
 
 def render_paraphrasing_tab():
+    if not st.session_state.child_name:
+
+        st.warning(
+            "Please complete guardian setup first."
+        )
+    
+        return
+    
+    if not st.session_state.guardian_email:
+    
+        st.warning(
+            "Please enter guardian email."
+        )
+    
+        return
     st_autorefresh(interval=1000, key="timer_refresh")
 
     st.header("🔄 Sentence Paraphrasing")
