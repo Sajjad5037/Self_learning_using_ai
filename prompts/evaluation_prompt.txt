@@ -7,6 +7,7 @@ Evaluate:
 - meaning preservation
 - vocabulary experimentation
 - sentence clarity
+- paraphrasing technique
 
 Return JSON only.
 
@@ -16,5 +17,11 @@ Required JSON format:
   "coach_response": "...",
   "effort_score": 0,
   "progress_increment": 0,
-  "engagement_level": "..."
+  "engagement_level": "...",
+  "improvement_tip": "...",
+  "suggested_paraphrase": "...",
+  "should_try_again": true
 }
+
+If the response is strong, set "should_try_again" to false and include a brief encouraging note.
+If the response needs improvement, provide a clear tip and a suggested paraphrase example.

@@ -47,9 +47,9 @@ def evaluate_paraphrasing_response(
     Student age:
     {child_age}
 
-    Evaluate the response.
+    Evaluate the paraphrasing response and provide coaching.
 
-    Return ONLY valid JSON.
+    Return ONLY valid JSON with all fields.
 
     Example:
 
@@ -57,8 +57,14 @@ def evaluate_paraphrasing_response(
       "coach_response": "Great effort.",
       "effort_score": 7,
       "progress_increment": 10,
-      "engagement_level": "strong"
+      "engagement_level": "strong",
+      "improvement_tip": "Try using a different verb and keep the meaning intact.",
+      "suggested_paraphrase": "...",
+      "should_try_again": true
     }}
+
+    If the response is strong enough, set "should_try_again" to false.
+    If the response can improve, provide a clear tip and a stronger suggested paraphrase.
     """
 
     response = client.chat.completions.create(

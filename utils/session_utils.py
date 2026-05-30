@@ -13,6 +13,8 @@ def initialize_session_state():
         "progress": 0,
         "chat_history": [],
         "current_sentence": "",
+        "current_feedback": {},
+        "student_paraphrasing_response": "",
         "final_report": "",
         "report_sent": False,
         "session_started": False

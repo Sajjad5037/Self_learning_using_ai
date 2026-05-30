@@ -42,6 +42,10 @@ def render_paraphrasing_tab():
 
     st.header("🔄 Sentence Paraphrasing")
 
+    st.info(
+        "This session will coach the student through paraphrasing with helpful feedback and improvement tips."
+    )
+
     initialize_timer()
 
     remaining_seconds = get_remaining_seconds()
@@ -68,10 +72,67 @@ def render_paraphrasing_tab():
         )
 
         st.session_state.current_sentence = sentence
+        st.session_state.current_feedback = {}
+        st.session_state.student_paraphrasing_response = ""
 
     st.subheader("Paraphrase This Sentence")
 
     st.write(st.session_state.current_sentence)
+
+    if st.session_state.current_feedback:
+
+        feedback = st.session_state.current_feedback
+
+        st.markdown("### 🧠 AI Coach Feedback")
+
+        st.info(
+            feedback.get("coach_response", "Here is your feedback.")
+        )
+
+        st.write(
+            f"Effort Score: {feedback.get('effort_score', 0)}/10"
+        )
+
+        st.write(
+            f"Engagement Level: {feedback.get('engagement_level', 'unknown')}"
+        )
+
+        if feedback.get("improvement_tip"):
+
+            st.write(
+                "**Tip:** "
+                f"{feedback['improvement_tip']}"
+            )
+
+        if feedback.get("suggested_paraphrase"):
+
+            with st.expander("View a stronger paraphrase suggestion"):
+
+                st.write(
+                    feedback["suggested_paraphrase"]
+                )
+
+        if feedback.get("should_try_again"):
+
+            st.warning(
+                "Try again using the tip above to make your paraphrase clearer and more accurate."
+            )
+
+        else:
+
+            if st.button(
+                "Continue to next sentence",
+                key="continue_sentence"
+            ):
+
+                next_sentence = generate_paraphrasing_sentence(
+                    child_age=st.session_state.child_age
+                )
+
+                st.session_state.current_sentence = next_sentence
+                st.session_state.current_feedback = {}
+                st.session_state.student_paraphrasing_response = ""
+                st.rerun()
 
     with st.form("paraphrasing_form"):
 
@@ -116,30 +177,21 @@ def render_paraphrasing_tab():
             evaluation["progress_increment"]
         )
 
-        st.success(
-            evaluation["coach_response"]
-        )
+        st.session_state.current_feedback = evaluation
 
-        st.write(
-            f"Effort Score: "
-            f"{evaluation['effort_score']}/10"
-        )
+        if evaluation.get("should_try_again"):
 
-        st.write(
-            f"Engagement Level: "
-            f"{evaluation['engagement_level']}"
-        )
+            st.warning(
+                "The AI coach has suggested a revision. Try again using the guidance shown above."
+            )
 
-        next_sentence = generate_paraphrasing_sentence(
-            child_age=st.session_state.child_age
-        )
+        else:
 
-        st.session_state.current_sentence = next_sentence
-
-        st.rerun()
+            st.success(
+                "Great paraphrase! Press Continue to next sentence when you are ready."
+            )
 
     if has_session_ended():
-        
 
         st.warning(
             "Session completed."
