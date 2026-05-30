@@ -79,9 +79,67 @@ def render_paraphrasing_tab():
 
     st.write(st.session_state.current_sentence)
 
-    if st.session_state.current_feedback:
+    with st.form("paraphrasing_form"):
 
-        feedback = st.session_state.current_feedback
+        student_response = st.text_area(
+            "Write your paraphrased sentence",
+            key="student_paraphrasing_response"
+        )
+    
+        submitted = st.form_submit_button(
+            "Submit Response"
+        )
+    
+    feedback = st.session_state.current_feedback or {}
+
+    if submitted:
+
+        if not student_response.strip():
+
+            st.warning(
+                "Please enter a response."
+            )
+
+            return
+
+        evaluation = evaluate_paraphrasing_response(
+            original_sentence=st.session_state.current_sentence,
+            student_response=student_response,
+            child_age=st.session_state.child_age
+        )
+
+        st.session_state.chat_history.append({
+
+            "original_sentence":
+            st.session_state.current_sentence,
+
+            "student_response":
+            student_response,
+
+            "evaluation":
+            evaluation
+        })
+
+        update_progress(
+            evaluation["progress_increment"]
+        )
+
+        st.session_state.current_feedback = evaluation
+        feedback = evaluation
+
+        if evaluation.get("should_try_again"):
+
+            st.warning(
+                "The AI coach has suggested a revision. Try again using the guidance shown above."
+            )
+
+        else:
+
+            st.success(
+                "Great paraphrase! Press Continue to next sentence when you are ready."
+            )
+
+    if feedback:
 
         st.markdown("### 🧠 AI Coach Feedback")
 
@@ -133,63 +191,6 @@ def render_paraphrasing_tab():
                 st.session_state.current_feedback = {}
                 st.session_state.student_paraphrasing_response = ""
                 st.rerun()
-
-    with st.form("paraphrasing_form"):
-
-        student_response = st.text_area(
-            "Write your paraphrased sentence",
-            key="student_paraphrasing_response"
-        )
-    
-        submitted = st.form_submit_button(
-            "Submit Response"
-        )
-    
-    if submitted:
-
-        if not student_response.strip():
-
-            st.warning(
-                "Please enter a response."
-            )
-
-            return
-
-        evaluation = evaluate_paraphrasing_response(
-            original_sentence=st.session_state.current_sentence,
-            student_response=student_response,
-            child_age=st.session_state.child_age
-        )
-
-        st.session_state.chat_history.append({
-
-            "original_sentence":
-            st.session_state.current_sentence,
-
-            "student_response":
-            student_response,
-
-            "evaluation":
-            evaluation
-        })
-
-        update_progress(
-            evaluation["progress_increment"]
-        )
-
-        st.session_state.current_feedback = evaluation
-
-        if evaluation.get("should_try_again"):
-
-            st.warning(
-                "The AI coach has suggested a revision. Try again using the guidance shown above."
-            )
-
-        else:
-
-            st.success(
-                "Great paraphrase! Press Continue to next sentence when you are ready."
-            )
 
     if has_session_ended():
 
