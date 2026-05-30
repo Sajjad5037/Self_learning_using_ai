@@ -56,5 +56,8 @@ def reset_and_rerun():
     # set a small sentinel to indicate reset completed
     st.session_state["session_just_reset"] = True
 
-    # perform a rerun to refresh UI after reset
-    st.experimental_rerun()
+    # Note: Do NOT call st.experimental_rerun() here because some
+    # Streamlit environments may not expose it and calling it from
+    # within certain contexts can raise AttributeError. The button
+    # `on_click` will cause Streamlit to rerun automatically after
+    # the callback returns, so we simply return from this function.
