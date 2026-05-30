@@ -123,10 +123,26 @@ def render_paraphrasing_tab():
             "evaluation":
             evaluation
         })
+        # Compute a safe progress increment. Prefer model-provided
+        # `progress_increment`, but fall back to a value derived from
+        # `effort_score` when missing or invalid.
+        progress_inc = evaluation.get("progress_increment")
 
-        update_progress(
-            evaluation["progress_increment"]
-        )
+        if not isinstance(progress_inc, int) or progress_inc <= 0:
+
+            effort = evaluation.get("effort_score")
+
+            try:
+                effort_val = int(effort)
+            except Exception:
+                effort_val = 5
+
+            # Map effort (0-10) to progress (5-20) as a fallback
+            progress_inc = max(5, min(20, effort_val * 2))
+
+            evaluation["progress_increment"] = progress_inc
+
+        update_progress(progress_inc)
 
         # If progress reaches 100%, end the session early and generate report
         if st.session_state.progress >= 100:
@@ -154,11 +170,11 @@ def render_paraphrasing_tab():
                 height=400
             )
 
-
             st.button("Reset session and return to setup", on_click=reset_and_rerun)
 
             st.stop()
 
+        # Save feedback and decide whether to auto-advance.
         st.session_state.current_feedback = evaluation
         feedback = evaluation
 
@@ -171,8 +187,20 @@ def render_paraphrasing_tab():
         else:
 
             st.success(
-                "Great paraphrase! Press Continue to next sentence when you are ready."
+                "Great paraphrase! Loading next sentence..."
             )
+
+            # Auto-advance to the next sentence so the student can continue.
+            next_sentence = generate_paraphrasing_sentence(
+                child_age=st.session_state.child_age
+            )
+
+            st.session_state.current_sentence = next_sentence
+            st.session_state.current_feedback = {}
+            st.session_state.student_paraphrasing_response = ""
+
+            # Refresh the app to show the new sentence and updated progress
+            st.rerun()
 
     if feedback:
 
