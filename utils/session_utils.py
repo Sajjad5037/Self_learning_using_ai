@@ -46,3 +46,15 @@ def reset_session_state():
 
     if "session_start_time" in st.session_state:
         del st.session_state["session_start_time"]
+
+
+def reset_and_rerun():
+    """Reset session and trigger a Streamlit rerun from a safe callback."""
+
+    reset_session_state()
+
+    # set a small sentinel to indicate reset completed
+    st.session_state["session_just_reset"] = True
+
+    # perform a rerun to refresh UI after reset
+    st.experimental_rerun()

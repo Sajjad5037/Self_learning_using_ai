@@ -21,7 +21,8 @@ from utils.timer_utils import (
     has_session_ended
 )
 from utils.session_utils import (
-    reset_session_state
+    reset_session_state,
+    reset_and_rerun
 )
 
 
@@ -153,11 +154,8 @@ def render_paraphrasing_tab():
                 height=400
             )
 
-            if st.button("Reset session and return to setup"):
 
-                reset_session_state()
-
-                st.rerun()
+            st.button("Reset session and return to setup", on_click=reset_and_rerun)
 
             st.stop()
 
@@ -258,10 +256,6 @@ def render_paraphrasing_tab():
             height=400
         )
 
-        if st.button("Reset session and return to setup"):
-
-            reset_session_state()
-
-            st.rerun()
+        st.button("Reset session and return to setup", on_click=reset_and_rerun)
 
         st.stop()
