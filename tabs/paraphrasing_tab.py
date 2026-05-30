@@ -20,6 +20,9 @@ from utils.timer_utils import (
     get_remaining_seconds,
     has_session_ended
 )
+from utils.session_utils import (
+    reset_session_state
+)
 
 
 def render_paraphrasing_tab():
@@ -124,6 +127,40 @@ def render_paraphrasing_tab():
             evaluation["progress_increment"]
         )
 
+        # If progress reaches 100%, end the session early and generate report
+        if st.session_state.progress >= 100:
+
+            if not st.session_state.report_sent:
+
+                report = generate_final_report()
+
+                st.session_state.final_report = report
+
+                # Future email sending
+                # send_report_email(report)
+
+                st.session_state.report_sent = True
+
+            st.balloons()
+
+            st.success(
+                "Progress reached 100%. Session completed. Great job!"
+            )
+
+            st.text_area(
+                "Generated Report",
+                st.session_state.final_report,
+                height=400
+            )
+
+            if st.button("Reset session and return to setup"):
+
+                reset_session_state()
+
+                st.rerun()
+
+            st.stop()
+
         st.session_state.current_feedback = evaluation
         feedback = evaluation
 
@@ -209,13 +246,22 @@ def render_paraphrasing_tab():
     
             st.session_state.report_sent = True
     
+        st.balloons()
+
         st.success(
-            "Session report generated successfully."
+            "Session report generated successfully. Great work!"
         )
-    
+
         st.text_area(
             "Generated Report",
             st.session_state.final_report,
             height=400
         )
+
+        if st.button("Reset session and return to setup"):
+
+            reset_session_state()
+
+            st.rerun()
+
         st.stop()
